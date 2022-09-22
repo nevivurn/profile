@@ -1,6 +1,11 @@
 .PHONY: all
 all: profile-500.png profile-2500.png
 
+.PHONY: nix-build
+nix-build:
+	nix build
+	install -m644 result/profile-*.png ./
+
 .PHONY: clean
 clean:
 	rm -rf profile-patched.svg profile-500.png profile-2500.png
