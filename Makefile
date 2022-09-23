@@ -4,7 +4,7 @@ all: profile-500.png profile-2500.png
 .PHONY: nix-build
 nix-build:
 	nix build
-	install -m644 result/profile-*.png ./
+	install -m644 result/profile-500.png result/profile-2500.png ./
 
 .PHONY: clean
 clean:
