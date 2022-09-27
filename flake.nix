@@ -13,8 +13,8 @@
 
         installPhase = ''
           runHook preInstall
-          install -Dm644 profile-500.png $out/profile-500.png
-          install -Dm644 profile-2500.png $out/profile-2500.png
+          mkdir $out
+          install -Dm644 *.png $out/
           runHook postInstall
         '';
       };
