@@ -1,4 +1,4 @@
-PROFILES := profile profile-full
+PROFILES := profile profile-full profile-bw profile-bw-full
 SIZES := 500 2500
 
 IMGS := $(foreach profile,$(PROFILES),$(foreach size,$(SIZES),$(profile)-$(size).png))
@@ -13,19 +13,19 @@ nix-build:
 
 .PHONY: clean
 clean:
-	rm -rf profile-patched.svg $(IMGS)
+	rm -rf *.patched.svg *.png
 
-profile-patched.svg: profile.svg
-	sed -e "s/dx=\"0\"/dx=\"-$$(echo "$$(inkscape -I line2 -W profile.svg) - $$(inkscape -I line1 -W profile.svg)" | bc)\"/" $^ > $@
+%-bw.svg: %.svg
+	sed -e 's/fill="#.\+"/fill="#fff"/' -e '/fill:/d' $^ > $@
 
-profile-500.png: profile-patched.svg
-	inkscape --export-type=png -w 500 -h 500 $^ -o $@
+%.patched.svg: %.svg
+	sed -e "s/dx=\"0\"/dx=\"-$$(echo "$$(inkscape -I line2 -W $^) - $$(inkscape -I line1 -W $^)" | bc)\"/" $^ > $@
 
-profile-2500.png: profile-patched.svg
-	inkscape --export-type=png -w 2500 -h 2500 $^ -o $@
-
-profile-full-500.png: profile-patched.svg
+%-full-500.png: %.patched.svg
 	inkscape --export-type=png --export-area=50:50:450:450 -w 400 -h 400 $^ -o $@
-
-profile-full-2500.png: profile-patched.svg
+%-full-2500.png: %.patched.svg
 	inkscape --export-type=png --export-area=50:50:450:450 -w 2000 -h 2000 $^ -o $@
+%-500.png: %.patched.svg
+	inkscape --export-type=png -w 500 -h 500 $^ -o $@
+%-2500.png: %.patched.svg
+	inkscape --export-type=png -w 2500 -h 2500 $^ -o $@

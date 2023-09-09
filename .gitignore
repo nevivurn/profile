@@ -1,2 +1,4 @@
-profile-patched.svg
-result
+*.svg
+!profile.svg
+/result
+/result-*
