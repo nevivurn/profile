@@ -6,11 +6,6 @@ IMGS := $(foreach profile,$(PROFILES),$(foreach size,$(SIZES),$(profile)-$(size)
 .PHONY: all
 all: $(IMGS)
 
-.PHONY: nix-build
-nix-build:
-	nix build
-	install -m644 $(addprefix result/,$(IMGS)) ./
-
 .PHONY: clean
 clean:
 	rm -rf *.patched.svg *.png

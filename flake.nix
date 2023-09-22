@@ -6,15 +6,14 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in
     {
-      defaultPackage.${system} = pkgs.stdenvNoCC.mkDerivation {
+      packages.${system}.default = pkgs.stdenvNoCC.mkDerivation {
         name = "nevi-profile";
         nativeBuildInputs = with pkgs; [ inkscape bc fira-code ];
         src = builtins.path { path = ./.; name = "profile"; };
 
         installPhase = ''
           runHook preInstall
-          mkdir $out
-          install -Dm644 *.png $out/
+          install -Dm644 -t $out/ *.png
           runHook postInstall
         '';
       };

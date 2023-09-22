@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  - push
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v22
+
+      - run: nix flake check
+      - run: nix build
+
+      - if: github.ref == 'refs/heads/master'
+        name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create --target "$GITHUB_REF" --generate-notes \
+            "v$(date +%s)" result/*.png
